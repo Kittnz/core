@@ -201,6 +201,7 @@ set (game_SRCS
     PlayerBots/TravelDataBuilder.cpp
     PlayerBots/TravelNodeGenerator.cpp
     PlayerBots/TravelPathGenerator.cpp
+    PlayerBots/TravelNodeGenerator_POI.cpp
     PlayerBots/WorldBotChat.cpp
     PlayerBots/WorldBotTaskManager.cpp
     PlayerBots/WorldBotTaskRoam.cpp

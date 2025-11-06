@@ -23,8 +23,14 @@ enum class TravelNodePathType : uint8
     AreaTrigger = 2,
     Transport = 3,
     FlightPath = 4,
-    TeleportSpell = 5,
-    StaticPortal = 6
+    TeleportSpell = 5,      // Mage portals, Hearthstone, etc.
+    StaticPortal = 6,       // Permanent world portals
+    
+    // TODO [POINT 7]: Add support for these advanced travel types
+    // WarlockSummon = 7,   // Warlock meeting stone summons
+    // MeetingStone = 8,    // Dungeon meeting stone summons
+    // DeathGate = 9,       // Death Knight death gate (TBC+)
+    // DruidTeleport = 10   // Moonglade teleport, etc.
 };
 
 struct TravelNode

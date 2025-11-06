@@ -42,6 +42,7 @@ public:
     std::string GetCurrentTaskName() const;
     void SetCurrentTask(uint8 taskId);
     void CompleteCurrentTask();
+    void SetSpecificTask(uint8 taskId); // Force switch to a specific task
     std::vector<uint8> GetImplementedTaskIds() const;
     const WorldBotTask* FindTaskById(uint8 taskId) const;
     bool IsTaskLevelAppropriate(uint8 taskId, uint8 botLevel) const;

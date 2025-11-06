@@ -19,6 +19,9 @@ public:
     // Generate path for a specific link
     bool GeneratePathForLink(uint32 fromNodeId, uint32 toNodeId, TravelNodePathType linkType);
     
+    // Diagnostics for unconnected nodes
+    void DiagnoseUnconnectedNodes();
+    
     // Export paths to database
     void ExportPathsToSQL(std::ofstream& file);
     
@@ -45,6 +48,20 @@ private:
     // Generate paths longer than PathFinder's practical limit (~200 yards)
     bool GenerateLongDistancePath(const NodeCandidate* from, const NodeCandidate* to,
                                   float totalDistance, std::vector<TravelPath>& outPath);
+    
+    // Generate intermediate waypoint nodes for long-distance gaps
+    std::vector<uint32> GenerateIntermediateNodes(const NodeCandidate* from, const NodeCandidate* to,
+                                                   float distance);
+    
+    // Find creature spawn locations along a path to use as natural waypoints
+    std::vector<uint32> FindCreatureWaypointsAlongPath(const NodeCandidate* from, const NodeCandidate* to,
+                                                        float distance);
+    
+    // Validate an intermediate waypoint position
+    bool ValidateIntermediatePoint(float x, float y, float z, Map* map);
+    
+    // Generate a single path segment (used for both normal and intermediate paths)
+    bool GeneratePathSegment(uint32 fromNodeId, uint32 toNodeId, TravelNodePathType linkType);
     
     // Simplify paths using Ramer-Douglas-Peucker algorithm
     void SimplifyPath(std::vector<TravelPath>& path, float tolerance = 2.0f);

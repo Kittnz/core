@@ -215,6 +215,34 @@ void WorldBotTaskManager::CompleteCurrentTask()
     }
 }
 
+void WorldBotTaskManager::SetSpecificTask(uint8 taskId)
+{
+    const WorldBotTask* task = FindTaskById(taskId);
+    if (task)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTaskManager: Force setting task to %s", task->name.c_str());
+        
+        // Clean up current task
+        if (m_currentTaskId != TASK_NONE)
+        {
+            const WorldBotTask* currentTask = FindTaskById(m_currentTaskId);
+            if (currentTask)
+            {
+                const_cast<WorldBotTask*>(currentTask)->isInProgress = false;
+                m_bot->OnTaskComplete(m_currentTaskId);
+            }
+        }
+        
+        // Start the specific task
+        m_currentTaskId = TASK_NONE;
+        StartTask(const_cast<WorldBotTask*>(task));
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotTaskManager: Cannot set specific task %u - task not found", taskId);
+    }
+}
+
 std::vector<uint8> WorldBotTaskManager::GetImplementedTaskIds() const
 {
     std::vector<uint8> implementedTasks;

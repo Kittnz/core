@@ -73,6 +73,9 @@ bool TravelDataBuilder::Phase1_GenerateNodes()
     m_nodeGenerator->GenerateFlightPaths();
     m_nodeGenerator->GenerateTransportLinks();
     
+    // Generate nodes at creature spawn clusters for grinding
+    m_nodeGenerator->GenerateNodesFromGrindSpots();
+    
     // Optional: Grid sampling
     if (m_generateGridNodes)
     {
@@ -101,11 +104,10 @@ bool TravelDataBuilder::Phase2_ValidateNodes()
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "=== Phase 2: Validating Nodes ===");
     
     m_nodeGenerator->ValidateNodeTerrain();
-    m_nodeGenerator->FilterDuplicateNodes(15.0f);
+    m_nodeGenerator->FilterDuplicateNodes(8.0f);
     m_nodeGenerator->PrioritizeNodes();
     
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Phase 2 Complete: %u validated nodes", 
-             m_nodeGenerator->GetNodeCount());
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Phase 2 Complete: %u validated nodes", m_nodeGenerator->GetNodeCount());
     return m_nodeGenerator->GetNodeCount() > 0;
 }
 
@@ -113,7 +115,14 @@ bool TravelDataBuilder::Phase3_GenerateLinks()
 {
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "=== Phase 3: Generating Links ===");
     
+    // First pass: Generate standard walking paths between nearby nodes
     m_nodeGenerator->GenerateWalkingPaths();
+    
+    // Second pass: Use creature spawn locations to bridge long-distance gaps
+    m_nodeGenerator->GenerateCreatureBasedWaypoints();
+    
+    // Optimize the network by removing useless links
+    m_nodeGenerator->OptimizeNodeNetwork();
     
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Phase 3 Complete: %u links generated", 
              m_nodeGenerator->GetLinkCount());

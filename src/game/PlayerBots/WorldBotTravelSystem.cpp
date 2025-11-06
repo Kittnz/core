@@ -297,7 +297,15 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
 
             sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Considering link from %u to %u of type %u", current, neighbor, static_cast<uint32>(linkType));
 
-            if (linkType != TravelNodePathType::Transport && GetNode(neighbor)->mapId != startNode->mapId)
+            // Check if neighbor node exists
+            const TravelNode* neighborNode = GetNode(neighbor);
+            if (!neighborNode)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Skipping link - neighbor node %u does not exist", neighbor);
+                continue;
+            }
+
+            if (linkType != TravelNodePathType::Transport && neighborNode->mapId != startNode->mapId)
             {
                 sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Skipping link due to different map ID");
                 continue;
@@ -580,6 +588,14 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     if (!startNode || !endNode)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find start or end node for bot %s", me->GetName());
+        
+        // Blacklist grind location if this is a grind task
+        if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
+        {
+            AddFailedGrindLocation(m_grindEntryTarget, x, y, z, mapId);
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s blacklisted unreachable grind location (no nodes found)", me->GetName());
+        }
+        
         return false;
     }
 
@@ -588,6 +604,14 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No possible path between start node %u and end node %u for bot %s",
             startNode->id, endNode->id, me->GetName());
+        
+        // Blacklist grind location if this is a grind task - THIS IS THE KEY FIX
+        if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
+        {
+            AddFailedGrindLocation(m_grindEntryTarget, x, y, z, mapId);
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s blacklisted grind location with no path connection", me->GetName());
+        }
+        
         return false;
     }
 
@@ -616,6 +640,10 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
         // Handle empty path differently for grind tasks
         if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
         {
+            // Blacklist this grind location since we can't path to it
+            AddFailedGrindLocation(m_grindEntryTarget, x, y, z, mapId);
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s blacklisted grind location with no valid path", me->GetName());
+            
             // For grind tasks, try direct movement if pathing fails
             me->GetMotionMaster()->MovePoint(0, x, y, z, MOVE_PATHFINDING);
             return true;
@@ -917,11 +945,17 @@ void WorldBotAI::HandleSpecificDestinationCompletion()
         return;
     }
 
-    // Check if this is the same destination we previously failed at
-    if (IsSameDestination(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap))
+    // Check if this is a grind task and the same destination we previously failed at
+    if (m_taskManager.GetCurrentTaskId() == TASK_GRIND && 
+        IsSameDestination(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s attempting to path to previously failed location, finding new grind spot",
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s attempting to path to previously failed grind location, blacklisting and finding new spot",
             me->GetName());
+        
+        // Add to grind blacklist
+        AddFailedGrindLocation(m_grindEntryTarget, m_grindDestination.x, m_grindDestination.y, m_grindDestination.z, me->GetMapId());
+        
+        // Complete task to trigger a new grind destination selection
         m_taskManager.CompleteCurrentTask();
         return;
     }
@@ -935,13 +969,24 @@ void WorldBotAI::HandleSpecificDestinationCompletion()
 
         if (m_failedPathAttempts >= MAX_PATH_ATTEMPTS)
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s exceeded maximum path attempts (%u), teleporting to destination",
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s exceeded maximum path attempts (%u) to reach destination",
                 me->GetName(), MAX_PATH_ATTEMPTS);
 
-            // Record this as a failed location before teleporting
+            // Record this as a failed location
             UpdateFailedLocation(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap);
-
-            me->TeleportTo(DestMap, DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, me->GetOrientation());
+            
+            // If this is a grind task, blacklist the location
+            if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
+            {
+                AddFailedGrindLocation(m_grindEntryTarget, m_grindDestination.x, m_grindDestination.y, m_grindDestination.z, me->GetMapId());
+                sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s blacklisted unreachable grind location, finding new spot", me->GetName());
+            }
+            else
+            {
+                // For non-grind tasks, try teleporting to destination as a last resort
+                me->TeleportTo(DestMap, DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, me->GetOrientation());
+            }
+            
             m_failedPathAttempts = 0;
             m_taskManager.CompleteCurrentTask();
             return;
@@ -956,37 +1001,17 @@ void WorldBotAI::HandleSpecificDestinationCompletion()
         {
             sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s failed to create path to destination", me->GetName());
             UpdateFailedLocation(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap);
+            
+            // If this is a grind task, blacklist the location
+            if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
+            {
+                AddFailedGrindLocation(m_grindEntryTarget, m_grindDestination.x, m_grindDestination.y, m_grindDestination.z, me->GetMapId());
+            }
+            
             m_taskManager.CompleteCurrentTask();
         }
     }
 }
-
-void WorldBotAI::HandleGrindTaskCompletion()
-{
-    m_taskManager.CompleteCurrentTask();
-}
-
-/*
-uint32 GetRandomTaxiNode(uint32 mapid, Team team)
-{
-    std::vector<uint32> nodeIds;
-    for (uint32 i = 1; i < sObjectMgr.GetMaxTaxiNodeId(); ++i)
-    {
-        TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(i);
-        if (node)
-        {
-            if (node->map_id == mapid)
-            {
-                if (node->MountCreatureID[team == ALLIANCE ? 1 : 0])
-                    nodeIds.push_back(node->ID);
-            }
-        }
-    }
-
-    uint32 id = 0;
-    id = SelectRandomContainerElement(nodeIds);
-    return id;
-}*/
 
 bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
 {
@@ -997,10 +1022,24 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
         return true;
     }
 
+    // Check if there's a next node in our path to determine the link we're traversing
+    if (m_currentPathIndex >= m_currentPath.size())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Node %u is the final destination, no action needed", nodeId);
+        return true;
+    }
+
+    uint32 nextNodeId = m_currentPath[m_currentPathIndex].nodeId;
+
     auto linkRange = sWorldBotTravelSystem.GetNodeLinks(nodeId);
     for (auto it = linkRange.first; it != linkRange.second; ++it)
     {
         const TravelNodeLink& link = it->second;
+        
+        // Only process the link that goes to our next destination
+        if (link.toNodeId != nextNodeId)
+            continue;
+
         TravelNodePathType linkType = static_cast<TravelNodePathType>(link.type);
         uint32 linkObject = link.object;
 
@@ -1061,37 +1100,82 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
             if (me->GetMoney() < 10000000)
                 me->SetMoney(10000000);
 
-            TaxiPathEntry const* tEntry = sTaxiPathStore.LookupEntry(linkObject);
-            if (tEntry)
+            // Get the current node to retrieve the source taxi node ID
+            const TravelNode* currentNode = sWorldBotTravelSystem.GetNode(nodeId);
+            
+            if (!currentNode)
             {
-                // Check if this flight path brings us significantly closer to our destination
-                const TravelNode* destNode = sWorldBotTravelSystem.GetNode(link.toNodeId);
-                if (destNode)
-                {
-                    float distanceAfterFlight = sWorldBotTravelSystem.GetDistance3D(destNode->x, destNode->y, destNode->z, DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s failed to get current node %u for flight path", 
+                    me->GetName(), nodeId);
+                return false;
+            }
 
-                    if (distanceAfterFlight < distanceToFinalDestination * 0.75f) // Flight reduces distance by at least 25%
+            // The current node's objectId stores the source TaxiNodes entry ID
+            // The link's object field stores the destination TaxiNodes entry ID
+            uint32 fromTaxiNode = currentNode->objectId;
+            uint32 toTaxiNode = link.object;
+            
+            if (fromTaxiNode == 0 || toTaxiNode == 0)
+            {
+                // Don't spam error - this is already logged in pathfinding
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s skipping flight path (missing taxi nodes: from=%u, to=%u)", 
+                    me->GetName(), fromTaxiNode, toTaxiNode);
+                return true; // Skip and continue walking
+            }
+
+            // Verify these are valid taxi nodes
+            TaxiNodesEntry const* fromTaxiEntry = sObjectMgr.GetTaxiNodeEntry(fromTaxiNode);
+            TaxiNodesEntry const* toTaxiEntry = sObjectMgr.GetTaxiNodeEntry(toTaxiNode);
+            
+            if (!fromTaxiEntry || !toTaxiEntry)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s invalid taxi node entries (from: %u, to: %u)", 
+                    me->GetName(), fromTaxiNode, toTaxiNode);
+                return true; // Skip and continue walking
+            }
+
+            // Get destination node for distance check
+            const TravelNode* destNode = sWorldBotTravelSystem.GetNode(link.toNodeId);
+            if (!destNode)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s failed to get destination node %u", 
+                    me->GetName(), link.toNodeId);
+                return true;
+            }
+
+            // Check if this flight path brings us significantly closer to our destination
+            float distanceAfterFlight = sWorldBotTravelSystem.GetDistance3D(destNode->x, destNode->y, destNode->z, 
+                DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+
+            if (distanceAfterFlight < distanceToFinalDestination * 0.75f) // Flight reduces distance by at least 25%
+            {
+                // Try to activate the taxi path
+                if (me->ActivateTaxiPathTo({ fromTaxiNode, toTaxiNode }, nullptr, true))
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s activated flight path from taxi node %u to %u (travel nodes %u -> %u)", 
+                        me->GetName(), fromTaxiNode, toTaxiNode, nodeId, link.toNodeId);
+                    
+                    // Skip to the destination node in our path
+                    while (m_currentPathIndex < m_currentPath.size() && m_currentPath[m_currentPathIndex].nodeId != link.toNodeId)
                     {
-                        if (me->ActivateTaxiPathTo({ tEntry->from, tEntry->to }, nullptr, true))
-                        {
-                            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s activated flight path from node %u to node %u", me->GetName(), tEntry->from, tEntry->to);
-                            return true;
-                        }
-                        else
-                        {
-                            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s failed to activate flight path from node %u to node %u", me->GetName(), tEntry->from, tEntry->to);
-                        }
+                        m_currentPathIndex++;
                     }
-                    else
-                    {
-                        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s skipping flight path as it doesn't bring us significantly closer to the destination", me->GetName());
-                    }
+                    
+                    return true;
                 }
+                else
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s failed to activate flight path, continuing on foot", me->GetName());
+                    // Fall through to skip the flight path
+                }
+            }
+            else
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s skipping flight path as it doesn't bring us significantly closer to destination", me->GetName());
             }
 
             // If we reach here, we either couldn't find a suitable flight path or activating it failed
             // We'll skip this node and continue to the next one
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s skipping flight path node %u", me->GetName(), nodeId);
             return true;
         }
         case TravelNodePathType::TeleportSpell:
@@ -1111,8 +1195,8 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
         }
     }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid links found for node %u", nodeId);
-    return false;
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: No valid link found from node %u to next node %u", nodeId, nextNodeId);
+    return true; // Continue anyway - might be at destination
 }
 
 #define SPELL_RED_GLOW 20370

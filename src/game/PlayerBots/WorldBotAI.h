@@ -99,7 +99,8 @@ public:
     WorldBotAI(uint8 race, uint8 class_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, bool isBattleBot, uint8 bgId)
         : CombatBotBaseAI(),  m_race(race), m_class(class_), m_mapId(mapId), m_instanceId(instanceId), m_x(x), m_y(y), m_z(z), m_o(o),
         m_isBattleBot(isBattleBot), m_battlegroundId(bgId), m_showPath(false), m_currentNodeId(0), m_currentPathIndex(0), m_isRunningToCorpse(false),
-        m_taskManager(this), m_isDualBotMovingToLocation(false), m_failedPathAttempts(0), m_lastFailedX(0.0f), m_lastFailedY(0.0f), m_lastFailedZ(0.0f), m_lastFailedMap(0), m_hasPreviousFailure(false)
+        m_taskManager(this), m_isDualBotMovingToLocation(false), m_failedPathAttempts(0), m_lastFailedX(0.0f), m_lastFailedY(0.0f), m_lastFailedZ(0.0f), m_lastFailedMap(0), m_hasPreviousFailure(false),
+        m_grindTaskFailedTime(0)
     {
         m_updateTimer.Reset(2 * IN_MILLISECONDS);
         m_updateMoveTimer.Reset(1 * IN_MILLISECONDS);
@@ -284,6 +285,30 @@ public:
     float m_grindRadius;
     uint32 m_grindTargetLevel;
     const int MAX_GRIND_LEVEL_DIFFERENCE = 3;
+    
+    // Prevent infinite loop when all grind locations are unreachable
+    time_t m_grindTaskFailedTime;
+    static const uint32 GRIND_RETRY_DELAY = 300; // 5 minutes in seconds before retrying grind task after complete failure
+
+    // Grind location blacklist - tracks failed locations to avoid repeating them
+    struct FailedGrindLocation {
+        uint32 creatureId;
+        float x, y, z;
+        uint32 mapId;
+        time_t failedTime;
+        
+        bool IsSameLocation(uint32 id, float posX, float posY, float posZ, uint32 map) const {
+            if (id != creatureId || map != mapId)
+                return false;
+            float distance = std::sqrt(pow(posX - x, 2) + pow(posY - y, 2) + pow(posZ - z, 2));
+            return distance < 50.0f; // Within 50 yards
+        }
+    };
+    std::vector<FailedGrindLocation> m_failedGrindLocations;
+    static const uint32 GRIND_BLACKLIST_DURATION = 1800; // 30 minutes in seconds
+    void AddFailedGrindLocation(uint32 creatureId, float x, float y, float z, uint32 mapId);
+    bool IsGrindLocationBlacklisted(uint32 creatureId, float x, float y, float z, uint32 mapId) const;
+    void CleanupOldFailedGrindLocations();
 
     // Dual task methods
     bool CanPerformDual() const;

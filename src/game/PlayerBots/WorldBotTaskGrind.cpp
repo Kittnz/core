@@ -11,6 +11,17 @@ extern std::vector<GrindCreatureInfo> grindCreatures;
 
 bool WorldBotAI::CanPerformGrind() const
 {
+    // Check if we recently failed to find any valid grind locations
+    if (m_grindTaskFailedTime > 0)
+    {
+        time_t now = time(nullptr);
+        if ((now - m_grindTaskFailedTime) < GRIND_RETRY_DELAY)
+        {
+            // Still in cooldown period
+            return false;
+        }
+    }
+
     std::string botName = me->GetName();
     std::transform(botName.begin(), botName.end(), botName.begin(), ::tolower);
 
@@ -39,10 +50,21 @@ void WorldBotAI::StartGrinding()
         }
         else
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s failed to set grind destination", me->GetName());
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s failed to set grind destination, switching to roam task temporarily", me->GetName());
+            
+            // Set the failure time to prevent immediate retry
+            m_grindTaskFailedTime = time(nullptr);
+            
+            // Complete the grind task - this will trigger task selection and automatically select roam
             m_taskManager.CompleteCurrentTask();
+            
             return;
         }
+    }
+    else
+    {
+        // Successfully set grind destination, clear failure time
+        m_grindTaskFailedTime = 0;
     }
 }
 
@@ -72,6 +94,9 @@ bool WorldBotAI::SetGrindDestination()
         return false;
     }
 
+    // Clean up old blacklisted locations
+    CleanupOldFailedGrindLocations();
+
     std::vector<const GrindCreatureInfo*> validCreatures;
 
     // find creatures within level range
@@ -89,9 +114,11 @@ bool WorldBotAI::SetGrindDestination()
 
             bool levelOk = (creature.level <= maxLevel && creature.level >= minLevel);
 
-            //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Checking grind mob - Name: %s, Level: %u, MyLevel: %u (Range: %d-%d), Map: %u - %s", quest.creatureName.c_str(), quest.level, myLevel, minLevel, maxLevel, quest.mapId, levelOk ? "VALID" : "Invalid level");
+            // Check if this location is blacklisted
+            bool blacklisted = IsGrindLocationBlacklisted(creature.creatureId, creature.position_x, 
+                                                         creature.position_y, creature.position_z, creature.mapId);
 
-            if (levelOk)
+            if (levelOk && !blacklisted)
             {
                 validCreatures.push_back(&creature);
             }
@@ -100,15 +127,46 @@ bool WorldBotAI::SetGrindDestination()
 
     if (validCreatures.empty())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid grind mobs found for bot %s (level %u) - Checked %zu total mobs", me->GetName(), me->GetLevel(), grindCreatures.size());
-        return false;
-    }
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid grind mobs found for bot %s (level %u) - Checked %zu total mobs, all valid locations may be blacklisted", 
+                 me->GetName(), me->GetLevel(), grindCreatures.size());
+        
+        // If all locations are blacklisted, clear the blacklist and try ONE more time
+        if (!m_failedGrindLocations.empty())
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Clearing grind location blacklist for bot %s to allow retry", me->GetName());
+            m_failedGrindLocations.clear();
+            
+            // Try again, but WITHOUT recursion - just re-search for valid creatures
+            for (const auto& creature : grindCreatures)
+            {
+                bool mapOk = (creature.mapId == me->GetMapId());
+                if (mapOk)
+                {
+                    int myLevel = me->GetLevel();
+                    int maxLevel = myLevel + MAX_GRIND_LEVEL_DIFFERENCE;
+                    int minLevel = myLevel - MAX_GRIND_LEVEL_DIFFERENCE;
+                    if (minLevel < 1) minLevel = 1;
 
-    if (validCreatures.empty())
-    {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid grind quests found for bot %s (level %u)", me->GetName(), me->GetLevel());
-
-        return false;
+                    bool levelOk = (creature.level <= maxLevel && creature.level >= minLevel);
+                    if (levelOk)
+                    {
+                        validCreatures.push_back(&creature);
+                    }
+                }
+            }
+            
+            // If STILL empty after clearing blacklist, we have a real problem
+            if (validCreatures.empty())
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid grind locations even after clearing blacklist for bot %s", me->GetName());
+                return false;
+            }
+        }
+        else
+        {
+            // No blacklisted locations but still no valid creatures
+            return false;
+        }
     }
 
     // Score each quest based on multiple factors
@@ -122,10 +180,10 @@ bool WorldBotAI::SetGrindDestination()
     {
         float distance = me->GetDistance(creature->position_x, creature->position_y, creature->position_z);
 
-        float distanceScore = 1.0f - (distance / 10000.0f); // Normalize to 0-1
-        float spawnScore = creature->spawnCount / 100.0f; // Normalize spawn count
+        float distanceScore = 1.0f - std::min(1.0f, distance / 10000.0f); // Normalize to 0-1
+        float spawnScore = std::min(1.0f, creature->spawnCount / 100.0f); // Normalize spawn count
         float levelDiffScore = 1.0f - (std::abs(static_cast<float>(me->GetLevel() - creature->level)) / float(MAX_GRIND_LEVEL_DIFFERENCE));
-        float clusterScore = 1.0f - (creature->clusterRadius / 500.0f); // Normalize radius
+        float clusterScore = 1.0f - std::min(1.0f, creature->clusterRadius / 500.0f); // Normalize radius
 
         float totalScore = (distanceScore * 0.4f) +    // Distance is most important
             (spawnScore * 0.3f) +        // Spawn count is second
@@ -139,17 +197,17 @@ bool WorldBotAI::SetGrindDestination()
     std::sort(scoredCreatures.begin(), scoredCreatures.end(),
         [](const CreatureScore& a, const CreatureScore& b) { return a.score > b.score; });
 
-    const GrindCreatureInfo* selectedCreatures = scoredCreatures[0].creature;
+    const GrindCreatureInfo* selectedCreature = scoredCreatures[0].creature;
 
-    m_grindEntryTarget = selectedCreatures->creatureId;
-    m_grindTargetLevel = selectedCreatures->level;
+    m_grindEntryTarget = selectedCreature->creatureId;
+    m_grindTargetLevel = selectedCreature->level;
     m_grindMaxLevel = me->GetLevel() + MAX_GRIND_LEVEL_DIFFERENCE;
-    m_grindDestination.x = selectedCreatures->position_x;
-    m_grindDestination.y = selectedCreatures->position_y;
-    m_grindDestination.z = selectedCreatures->position_z;
+    m_grindDestination.x = selectedCreature->position_x;
+    m_grindDestination.y = selectedCreature->position_y;
+    m_grindDestination.z = selectedCreature->position_z;
 
     // Set grind radius based on cluster size but no larger than large visibility
-    m_grindRadius = std::min(selectedCreatures->clusterRadius * 1.2f, VISIBILITY_DISTANCE_LARGE);
+    m_grindRadius = std::min(selectedCreature->clusterRadius * 1.2f, VISIBILITY_DISTANCE_LARGE);
 
     // Check if we're already close enough to this destination
     float distanceToDestination = me->GetDistance(m_grindDestination.x, m_grindDestination.y, m_grindDestination.z);
@@ -160,10 +218,15 @@ bool WorldBotAI::SetGrindDestination()
     }
 
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Set grind destination for bot %s (level %u) to kill %s (level %u) at position (%.2f, %.2f, %.2f)",
-        me->GetName(), me->GetLevel(), selectedCreatures->creatureName.c_str(), selectedCreatures->level,
+        me->GetName(), me->GetLevel(), selectedCreature->creatureName.c_str(), selectedCreature->level,
         m_grindDestination.x, m_grindDestination.y, m_grindDestination.z);
 
-    return StartNewPathToSpecificDestination(m_grindDestination.x, m_grindDestination.y, m_grindDestination.z, me->GetMapId(), false);
+    bool pathResult = StartNewPathToSpecificDestination(m_grindDestination.x, m_grindDestination.y, m_grindDestination.z, me->GetMapId(), false);
+    
+    // If pathing failed immediately (nodes not connected, etc.), the location will be blacklisted
+    // inside StartNewPathToSpecificDestination, so we don't need to do it here again
+    
+    return pathResult;
 }
 
 void WorldBotAI::UpdateGrindingBehavior()
@@ -254,4 +317,62 @@ void WorldBotAI::RegisterGrindTask()
         1,
         60
         });
+}
+
+void WorldBotAI::AddFailedGrindLocation(uint32 creatureId, float x, float y, float z, uint32 mapId)
+{
+    // Check if this location is already in the blacklist
+    for (const auto& failed : m_failedGrindLocations)
+    {
+        if (failed.IsSameLocation(creatureId, x, y, z, mapId))
+        {
+            // Already blacklisted, don't add duplicate
+            return;
+        }
+    }
+
+    FailedGrindLocation failed;
+    failed.creatureId = creatureId;
+    failed.x = x;
+    failed.y = y;
+    failed.z = z;
+    failed.mapId = mapId;
+    failed.failedTime = time(nullptr);
+
+    m_failedGrindLocations.push_back(failed);
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s blacklisted grind location (creature %u) at (%.2f, %.2f, %.2f) on map %u. Blacklist size: %zu",
+        me->GetName(), creatureId, x, y, z, mapId, m_failedGrindLocations.size());
+}
+
+bool WorldBotAI::IsGrindLocationBlacklisted(uint32 creatureId, float x, float y, float z, uint32 mapId) const
+{
+    time_t now = time(nullptr);
+    for (const auto& failed : m_failedGrindLocations)
+    {
+        // Check if blacklist entry has expired
+        if (now - failed.failedTime > GRIND_BLACKLIST_DURATION)
+            continue;
+
+        if (failed.IsSameLocation(creatureId, x, y, z, mapId))
+            return true;
+    }
+    return false;
+}
+
+void WorldBotAI::CleanupOldFailedGrindLocations()
+{
+    time_t now = time(nullptr);
+    auto it = m_failedGrindLocations.begin();
+    while (it != m_failedGrindLocations.end())
+    {
+        if (now - it->failedTime > GRIND_BLACKLIST_DURATION)
+        {
+            it = m_failedGrindLocations.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
