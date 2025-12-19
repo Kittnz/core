@@ -321,7 +321,7 @@ void Player::CleanupsBeforeDelete()
     Unit::CleanupsBeforeDelete();
 }
 
-bool Player::ValidateAppearance(uint8 race, uint8 class_, uint8 gender, uint8 hairID, uint8 hairColor, uint8 faceID, uint8 facialHair, uint8 skinColor, bool create /*=false*/)
+bool Player::ValidateAppearance(uint8 race, uint8 gender, uint8 hairID, uint8 hairColor, uint8 faceID, uint8 facialHair, uint8 skinColor)
 {
     // For Skin type is always 0
     CharSectionsEntry const* skinEntry = GetCharSectionEntry(race, SECTION_TYPE_SKIN, gender, 0, skinColor);
@@ -352,6 +352,48 @@ bool Player::ValidateAppearance(uint8 race, uint8 class_, uint8 gender, uint8 ha
         return false;
 
     return true;
+}
+
+void Player::SelectRandomAppearance(uint8 race, uint8 gender, uint8& hairID, uint8& hairColor, uint8& faceID, uint8& facialHair, uint8& skinColor)
+{
+    // make sure values are always initialized
+    hairID = 0;
+    hairColor = 0;
+    faceID = 0;
+    facialHair = 0;
+    skinColor = 0;
+
+    {
+        std::vector<std::pair<uint8, uint8>> validFace;
+        GetAllValidCharSectionVariationAndColorPairs(race, SECTION_TYPE_FACE, gender, validFace);
+        if (!validFace.empty())
+        {
+            auto face = SelectRandomContainerElement(validFace);
+            faceID = face.first;
+            skinColor = face.second;
+        }
+    }
+
+    {
+        std::vector<std::pair<uint8, uint8>> validHair;
+        GetAllValidCharSectionVariationAndColorPairs(race, SECTION_TYPE_HAIR, gender, validHair);
+        if (!validHair.empty())
+        {
+            auto hair = SelectRandomContainerElement(validHair);
+            hairID = hair.first;
+            hairColor = hair.second;
+        }
+    }
+
+    {
+        std::vector<std::pair<uint8, uint8>> validFacialHair;
+        GetAllValidCharSectionVariationAndColorPairs(race, SECTION_TYPE_FACIAL_HAIR, gender, validFacialHair);
+        if (!validFacialHair.empty())
+        {
+            auto beard = SelectRandomContainerElement(validFacialHair);
+            facialHair = beard.first;
+        }
+    }
 }
 
 bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 class_, uint8 gender, uint8 skin, uint8 face, uint8 hairStyle, uint8 hairColor, uint8 facialHair)
@@ -418,7 +460,7 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
 
     // fix cast time showed in spell tooltip on client
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 #else
     SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
@@ -3289,7 +3331,7 @@ void Player::InitStatsForLevel(bool reapplyMods)
     UpdateSkillsForLevel();
 
     // set default cast time multiplier
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 #else
     SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
@@ -3314,7 +3356,7 @@ void Player::InitStatsForLevel(bool reapplyMods)
     //[-ZERO] SetUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS,0);
     for (int i = 0; i < MAX_SPELL_SCHOOL; ++i)
     {
-        SetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + i, 0);
+        SetInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + i, 0);
         SetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + i, 0);
         SetFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + i, 1.00f);
     }
@@ -7204,6 +7246,28 @@ void Player::_ApplyWeaponDependentAuraDamageMod(Item const* item, WeaponAttackTy
 
     if (item->IsFitToSpellRequirements(aura->GetSpellProto()))
         HandleStatModifier(unitMod, unitModType, modifier->m_amount, apply);
+}
+
+void Player::UpdateDamageDonePercent(uint32 school)
+{
+    float multiplier = 1.0f;
+
+    AuraList const& mTotalAuraList = GetAurasByType(SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
+    for (const auto& aura : mTotalAuraList)
+    {
+        if (!aura->IsApplied())
+            continue;
+
+        // skip item specific requirements
+        if (aura->GetSpellProto()->EquippedItemClass != -1 || aura->GetSpellProto()->EquippedItemInventoryTypeMask != 0)
+            continue;
+
+        Modifier* mod = aura->GetModifier();
+        if (mod->m_miscvalue & (1 << school))
+            multiplier *= (100.0f + mod->m_amount) / 100.0f;
+    }
+
+    SetFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + school, multiplier);
 }
 
 void Player::ApplyItemEquipSpell(Item* item, bool apply, bool formChange)
@@ -11581,10 +11645,10 @@ void Player::SendEquipError(InventoryResult msg, Item const* pItem, Item const* 
     GetSession()->SendPacket(&data);
 }
 
-void Player::SendOpenContainer() const
+void Player::SendOpenContainer(ObjectGuid itemGuid) const
 {
     WorldPacket data(SMSG_OPEN_CONTAINER, 8);   // opens the main bag in the UI
-    data << GetObjectGuid();
+    data << itemGuid;
     GetSession()->SendPacket(&data);
 }
 
@@ -12073,7 +12137,7 @@ void Player::PrepareGossipMenu(WorldObject* pSource, uint32 menuId)
                         hasMenuItem = false;
                     break;
                 case GOSSIP_OPTION_UNLEARNPETSKILLS:
-                    if (!GetPet() || GetPet()->getPetType() != HUNTER_PET || GetPet()->m_petSpells.size() <= 1 || pCreature->GetCreatureInfo()->trainer_type != TRAINER_TYPE_PETS || pCreature->GetCreatureInfo()->trainer_class != CLASS_HUNTER)
+                    if (!GetPet() || GetPet()->GetPetType() != HUNTER_PET || GetPet()->m_petSpells.size() <= 1 || pCreature->GetCreatureInfo()->trainer_type != TRAINER_TYPE_PETS || pCreature->GetCreatureInfo()->trainer_class != CLASS_HUNTER)
                         hasMenuItem = false;
                     break;
                 case GOSSIP_OPTION_TAXIVENDOR:
@@ -18333,14 +18397,6 @@ void Player::SendDismountResult(UnitDismountResult result) const
     GetSession()->SendPacket(&data);
 }
 
-void Player::ScheduleStandUp()
-{
-    if (sWorld.getConfig(CONFIG_UINT32_SPELL_PROC_DELAY))
-        m_isStandUpScheduled = true;
-    else
-        SetStandState(UNIT_STAND_STATE_STAND);
-}
-
 void Player::InitDataForForm(bool reapplyMods)
 {
     ShapeshiftForm form = GetShapeshiftForm();
@@ -20913,7 +20969,7 @@ void Player::UnsummonPetTemporaryIfAny()
     if (!pet)
         return;
 
-    if (!m_temporaryUnsummonedPetNumber && pet->isControlled() && !pet->isTemporarySummoned())
+    if (!m_temporaryUnsummonedPetNumber && pet->IsControlled() && !pet->IsTemporarySummoned())
         m_temporaryUnsummonedPetNumber = pet->GetCharmInfo()->GetPetNumber();
 
     pet->Unsummon(PET_SAVE_AS_CURRENT, this);
@@ -22108,7 +22164,7 @@ void Player::AddGCD(SpellEntry const& spellEntry, uint32 /*forcedDuration = 0*/,
         spellEntry.DmgClass != SPELL_DAMAGE_CLASS_MELEE && spellEntry.DmgClass != SPELL_DAMAGE_CLASS_RANGED &&
         !spellEntry.HasAttribute(SPELL_ATTR_USES_RANGED_SLOT) && !spellEntry.HasAttribute(SPELL_ATTR_IS_ABILITY))
     {
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
         gcdDuration = int32(float(gcdDuration) * GetFloatValue(UNIT_MOD_CAST_SPEED));
 #else
         gcdDuration = int32(float(gcdDuration) * (1.0f + GetInt32Value(UNIT_MOD_CAST_SPEED) / 100.0f));
